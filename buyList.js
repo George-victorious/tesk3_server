@@ -1,10 +1,8 @@
-import {TBuy} from "./types";
-
-const buyList: TBuy[] = [
+const buyList = [
   {
     id: 1,
     userId: 1,
-    status: 0, // 0: active, 1: delivering, 2: closed
+    status: 0,
     created: 1629536186344,
     deleveredAt: null,
     productName: 'Робот-пылесос',

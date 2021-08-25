@@ -4,18 +4,17 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 const jsonParser = bodyParser.json();
 
-import { TBuy, TUser } from './types';
-const users: any[] = require('./users');
-const buyList: any[] = require('./buyList');
+const users = require('./users');
+const buyList = require('./buyList');
 
-app.use((req: any, res: any, next: any) => {
+app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', '*');
   res.header('Access-Control-Allow-Headers', '*');
   next();
 });
 
-app.get('/login', (req: any, res: any) => {
+app.get('/login', (req, res) => {
   const { email, password } = req.query;
   const currentUser = users.filter(
     (user) => user.email === email && user.password === password
@@ -25,8 +24,8 @@ app.get('/login', (req: any, res: any) => {
   });
 });
 
-app.put('/registry', jsonParser, (req: any, res: any) => {
-  const user = users.find((user: TUser) => user.email === req.body.user.email);
+app.put('/registry', jsonParser, (req, res) => {
+  const user = users.find((user) => user.email === req.body.user.email);
   if (user) {
     res.status(409).json({
       user: null,
@@ -47,7 +46,7 @@ app.put('/registry', jsonParser, (req: any, res: any) => {
   }
 });
 
-app.get('/users', (req: any, res: any) => {
+app.get('/users', (req, res) => {
   const newUsers = users.map((user) => ({
     ...user,
     buyCount: buyList.filter((buy) => buy.userId === user.id).length,
@@ -57,7 +56,7 @@ app.get('/users', (req: any, res: any) => {
   });
 });
 
-app.get('/buylist', (req: any, res: any) => {
+app.get('/buylist', (req, res) => {
   const { id } = req.query;
   const buyListFiltered = buyList.filter((user) => user.userId === +id);
   res.status(200).json({
@@ -65,7 +64,7 @@ app.get('/buylist', (req: any, res: any) => {
   });
 });
 
-app.put('/order', jsonParser, (req: any, res: any) => {
+app.put('/order', jsonParser, (req, res) => {
   const { id } = req.body;
   const {
     productName,

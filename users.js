@@ -1,6 +1,4 @@
-import { TUser } from './types';
-
-const users: TUser[] = [
+const users = [
   {
     id: 1,
     gender: 0,
