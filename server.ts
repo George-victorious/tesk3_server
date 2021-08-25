@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+const PORT = process.env.PORT || 4000;
 const jsonParser = bodyParser.json();
 
 import { TBuy, TUser } from './types';
@@ -102,6 +103,6 @@ app.put('/order', jsonParser, (req: any, res: any) => {
   });
 });
 
-app.listen(4000, () => {
+app.listen(PORT, () => {
   console.log(`Example app listening at http://localhost:${4000}`);
 });
