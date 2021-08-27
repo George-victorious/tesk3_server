@@ -46,6 +46,17 @@ app.put('/registry', jsonParser, (req, res) => {
   }
 });
 
+app.post('/user', jsonParser, (req, res) => {
+  const index = users.findIndex(user => user.id === req.body.id);
+  if(index >= 0) {
+    users[index] = req.body;
+  };
+  console.log(req.body);
+  res.status(200).json({
+    user: users[index],
+  });
+});
+
 app.get('/users', (req, res) => {
   const newUsers = users.map((user) => ({
     ...user,
