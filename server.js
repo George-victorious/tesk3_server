@@ -3,6 +3,18 @@ const bodyParser = require('body-parser');
 const app = express();
 const PORT = process.env.PORT || 4000;
 const jsonParser = bodyParser.json();
+const mongoose = require('mongoose');
+const userSchema = require("./shemas/user");
+const orderSchema = require("./shemas/order");
+
+const uri = `mongodb+srv://task3:task3@cluster0.9p4t4.mongodb.net/task3?retryWrites=true&w=majority`;
+mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology: true})
+  .then( () => {
+    console.log('Connected to database')
+  })
+  .catch( (err) => {
+    console.error(`Error connecting to the database. \n${err}`);
+  });
 
 const users = require('./users');
 const buyList = require('./buyList');
@@ -14,19 +26,21 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/login', (req, res) => {
+app.get('/login', async (req, res) => {
   const { email, password } = req.query;
-  const currentUser = users.filter(
-    (user) => user.email === email && user.password === password
-  )[0];
+  const currentSchema = mongoose.model('users', userSchema);
+  const userBD = await currentSchema.findOne({email: email, password: password});
   res.status(200).json({
-    user: currentUser ?? null,
+    user: userBD,
   });
 });
 
-app.put('/registry', jsonParser, (req, res) => {
-  const user = users.find((user) => user.email === req.body.user.email);
-  if (user) {
+app.put('/registry', jsonParser, async (req, res) => {
+  const currentSchema = mongoose.model('users', userSchema);
+  const userBD = await currentSchema.findOne({
+    email: req.body.user.email,
+  });
+  if (userBD) {
     res.status(409).json({
       user: null,
       isError: {
@@ -35,9 +49,10 @@ app.put('/registry', jsonParser, (req, res) => {
       },
     });
   } else {
-    users.push({ ...req.body.user, id: new Date().getTime() });
+    const newUser = new currentSchema(req.body.user);
+    const savedUser = await newUser.save();
     res.status(201).json({
-      user: req.body.user,
+      user: savedUser,
       isError: {
         status: false,
         message: '',
@@ -46,53 +61,56 @@ app.put('/registry', jsonParser, (req, res) => {
   }
 });
 
-app.post('/user', jsonParser, (req, res) => {
-  const index = users.findIndex(user => user.id === req.body.id);
-  if(index >= 0) {
-    users[index] = req.body;
-  };
-  console.log(req.body);
+app.post('/user', jsonParser, async (req, res) => {
+  const currentSchema = mongoose.model('users', userSchema);
+  const userBD = await currentSchema.findOneAndUpdate({
+    id: req.body.id,
+  },{
+    $set: req.body
+  });
   res.status(200).json({
-    user: users[index],
+    user: userBD,
   });
 });
 
-app.get('/users', (req, res) => {
-  const newUsers = users.map((user) => ({
-    ...user,
-    buyCount: buyList.filter((buy) => buy.userId === user.id).length,
+app.get('/users', async (req, res) => {
+  const currentSchema = mongoose.model('users', userSchema);
+  const userBD = await currentSchema.find({});
+  const newUsers = userBD.map((user) => ({
+    ...user['_doc'],
+    buyCount: 0,
   }));
   res.status(200).json({
     users: newUsers,
   });
 });
 
-app.get('/buylist', (req, res) => {
-  const { id } = req.query;
-  const buyListFiltered = buyList.filter((user) => user.userId === +id);
+app.get('/buylist', async (req, res) => {
+  console.log('тут')
+  const currentSchema = mongoose.model('orders', orderSchema);
+  const ordersBD = await currentSchema.find({
+    userId: +req.query.id,
+  });
+  console.log(ordersBD)
   res.status(200).json({
-    buyList: buyListFiltered,
+    buyList: ordersBD,
   });
 });
 
-app.put('/order', jsonParser, (req, res) => {
+app.put('/order', jsonParser, async (req, res) => {
+  const currentSchema = mongoose.model('orders', orderSchema);
   const { id } = req.body;
   const {
-    productName,
-    price,
-    description,
-    phone,
-    deleveredFrom,
     city,
     address,
     lat,
     lng,
   } = req.body.order;
-  const time = new Date().getTime();
-  buyList.push({
-    id: time,
-    productName: productName,
-    price: price,
+  const newOrder = new currentSchema({
+    ...req.body.order,
+    id: new Date().getTime(),
+    created: new Date().getTime(),
+    userId: id,
     deleveredTo: {
       city: city,
       address: address,
@@ -101,15 +119,10 @@ app.put('/order', jsonParser, (req, res) => {
         lng: +lng ?? 0,
       },
     },
-    deleveredFrom: deleveredFrom,
-    userId: id,
-    status: 0,
-    created: time,
-    deleveredAt: null,
-    description: description,
   });
-  res.status(200).json({
-    order: req.body.order,
+  const savedOrder = await newOrder.save();
+  res.status(201).json({
+    order: savedOrder,
   });
 });
 

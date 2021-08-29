@@ -2,7 +2,7 @@ const users = [
   {
     id: 1,
     gender: 0,
-    email: 'georgi.filipov@com',
+    email: 'georgi.filipov@lever.com',
     firstName: 'Georgi',
     middleName: 'Igorevich',
     lastName: 'Filipov',
@@ -14,7 +14,7 @@ const users = [
   {
     id: 2,
     gender: 0,
-    email: 'alex.sabadash@com',
+    email: 'alex.sabadash@lever.com',
     firstName: 'Alex',
     middleName: 'Yegorovich',
     lastName: 'Sabadash',
