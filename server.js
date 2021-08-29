@@ -16,9 +16,6 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology: true})
     console.error(`Error connecting to the database. \n${err}`);
   });
 
-const users = require('./users');
-const buyList = require('./buyList');
-
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', '*');
