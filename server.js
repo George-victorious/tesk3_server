@@ -72,10 +72,12 @@ app.post('/user', jsonParser, async (req, res) => {
 
 app.get('/users', async (req, res) => {
   const currentSchema = mongoose.model('users', userSchema);
-  const userBD = await currentSchema.find({});
-  const newUsers = userBD.map((user) => ({
+  const orderCurrentSchema = mongoose.model('orders', orderSchema);
+  const usersBD = await currentSchema.find({});
+  const userBuyListBD = await orderCurrentSchema.find({});
+  const newUsers = usersBD.map((user) => ({
     ...user['_doc'],
-    buyCount: 0,
+    buyCount: userBuyListBD.filter(el => el.userId === user.id).length,
   }));
   res.status(200).json({
     users: newUsers,
