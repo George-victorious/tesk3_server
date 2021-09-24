@@ -29,7 +29,7 @@ module.exports = [
     "name": "Ervin Howell",
     "username": "Antonette",
     "email": "Shanna@melissa.tv",
-    "dov": 654134400,
+    "dob": 654134400,
     "role": "editor",
     "address": {
       "street": "Victor Plains",
@@ -54,7 +54,7 @@ module.exports = [
     "name": "Clementine Bauch",
     "username": "Samantha",
     "email": "Nathan@yesenia.net",
-    "dov": 338601600,
+    "dob": 338601600,
     "role": "admin",
     "address": {
       "street": "Douglas Extension",
@@ -79,7 +79,7 @@ module.exports = [
     "name": "Patricia Lebsack",
     "username": "Karianne",
     "email": "Julianne.OConner@kory.org",
-    "dov": 496368000,
+    "dob": 496368000,
     "role": "user",
     "address": {
       "street": "Hoeger Mall",
