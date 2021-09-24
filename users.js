@@ -104,7 +104,7 @@ module.exports = [
     "name": "Chelsey Dietrich",
     "username": "Kamren",
     "email": "Lucio_Hettinger@annie.ca",
-    "dob": 811900800,
+    "dob": 1506211200,
     "role": "guest",
     "address": {
       "street": "Skiles Walks",
@@ -154,7 +154,7 @@ module.exports = [
     "name": "Kurtis Weissnat",
     "username": "Elwyn.Skiles",
     "email": "Telly.Hoeger@billy.biz",
-    "dob": 748828800,
+    "dob": 0,
     "role": "guest",
     "address": {
       "street": "Rex Trail",
@@ -179,7 +179,7 @@ module.exports = [
     "name": "Nicholas Runolfsdottir V",
     "username": "Maxime_Nienow",
     "email": "Sherwood@rosamond.me",
-    "dob": 843523200,
+    "dob": -608169600,
     "role": "editor",
     "address": {
       "street": "Ellsworth Summit",
