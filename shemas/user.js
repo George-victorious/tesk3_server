@@ -6,7 +6,6 @@ const userSchema = new Schema({
     type: Number,
     required: true,
     unique: false,
-    default: new Date().getTime()
   },
   gender: {
     type: Number,
